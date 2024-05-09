@@ -46,6 +46,8 @@ public void validateButtonIsDisplayed() {
 	System.out.println("Vote button is displayed"+" "+isvotebuttondisplayed);
 	
 }
+
+//mouse actions
 @Test
 public void verifyrightclick()
 
