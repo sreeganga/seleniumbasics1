@@ -1,5 +1,6 @@
 package seleniumbasiccommands;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -101,6 +102,50 @@ public void verifymouseover()
 	 WebElement subelement = driver.findElement(By.xpath("//a[text()='SUB SUB LIST »']"));
 	 action.moveToElement(subelement).build().perform();
 	 
+	 
+}
+@Test
+public void verifySimpleAlert()
+{
+	driver.get("https://demoqa.com/alerts");
+	WebElement clickme = driver.findElement(By.xpath("//button[@id='alertButton']"));
+	clickme.click();
+	Alert alert= driver.switchTo().alert();
+	alert.accept();;
+}
+@Test
+public void validateconfirmation()
+{
+	driver.get("https://demoqa.com/alerts");
+	WebElement confirm = driver.findElement(By.xpath("//button[@id='confirmButton']"));
+	confirm.click();
+	Alert alert= driver.switchTo().alert();
+	String text=alert.getText();
+	System.out.println(text);
+	alert.dismiss();
+	WebElement clickcancel = driver.findElement(By.xpath("//span[@id='confirmResult']"));
+	String actualresult=clickcancel.getText();
+	String expectedresult="You selected Cancel";
+	Assert.assertEquals(actualresult, expectedresult,"You selected ok");
+	
+	
+	
+}
+@Test
+public void validatePromptAlert() 
+{
+	 driver.get("https://demoqa.com/alerts");  
+	 WebElement prompt_button = driver.findElement(By.xpath("//button[@id='promtButton']"));
+	 prompt_button.click();
+	 Alert alert = driver.switchTo().alert();
+	 String alert_text = alert.getText();
+	 System.out.println(alert_text);
+	 alert.sendKeys("The name is test");
+	 alert.accept();
+	 WebElement textmessage_name = driver.findElement(By.xpath("//span[@id='promptResult']"));
+	 String actualresult = textmessage_name.getText();
+	 String expectedresult = "You entered The name is test";
+	 Assert.assertEquals(actualresult, expectedresult,"You have not entered a text");
 	 
 }
 }
