@@ -1,13 +1,22 @@
 package seleniumbasiccommands;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class WebelemntMethod1 extends Browserlaunch {
+private int j;
 @Test
 	public void validataeisSelected()
 	{
@@ -147,5 +156,101 @@ public void validatePromptAlert()
 	 String expectedresult = "You entered The name is test";
 	 Assert.assertEquals(actualresult, expectedresult,"You have not entered a text");
 	 
+}
+@Test
+public void verifymultiplewindowhandling()
+{
+    driver.get("https://demo.guru99.com/popup.php");
+    String parentwindow_handleid = 	driver.getWindowHandle();
+    System.out.println(parentwindow_handleid);
+    WebElement click_button = driver.findElement(By.xpath("//a[@target='_blank'and text()='Click Here']"));
+    click_button.click();
+    Set<String> windowshandlesid = driver.getWindowHandles();
+    System.out.println(windowshandlesid);
+    Iterator <String> values = windowshandlesid.iterator();// 
+    while(values.hasNext())// return type boolean
+    {
+ 	String handleid = values.next();
+ 	if(!handleid.equals(parentwindow_handleid)) 
+ 	 {
+ 		driver.switchTo().window(handleid);
+ 		WebElement emailid = driver.findElement(By.xpath("//input[@name='emailid']"));
+ 		emailid.sendKeys("abc@gmail.com");
+ 		WebElement submit_button = driver.findElement(By.xpath("//input[@name='btnLogin']"));
+ 		submit_button.click();
+ 		driver.close();
+ 		
+ 	 }
+   }
+    driver.switchTo().window(parentwindow_handleid);
+ }
+@Test
+public void verifyfileupload()
+{
+	driver.get("https://demo.guru99.com/test/upload/");
+	WebElement file = driver.findElement(By.xpath("//input[@id='uploadfile_0']"));
+	file.sendKeys("C:\\Users\\user\\git\\seleniumbasics1\\SeleniumBasic\\src\\main\\resources");//resourse file nte path
+	WebElement checkbox = driver.findElement(By.xpath("//input[@id='terms']"));
+	checkbox.click();
+	WebElement submit_button = driver.findElement(By.xpath("//button[@id='submitbutton']"));
+	submit_button.click();
+	
+}
+@Test
+public void verifyframes()
+{
+	driver.get("https://demoqa.com/frames");
+	List<WebElement>iframe_tags=driver.findElements(By.tagName("iframe"));
+	int size=iframe_tags.size();
+	System.out.println("total no of frame"+""+size);
+	//driver.switchTo().frame(3);
+	//driver.switchTo().frame("frame1");
+	WebElement frame= driver.findElement(By.id("frame1"));
+	driver.switchTo().frame(frame);
+	WebElement frame1_text = driver.findElement(By.id("sampleHeading"));
+    String frame_text = frame1_text.getText();
+    System.out.println(frame_text);
+    driver.switchTo().defaultContent();// to home page from a frame
+}
+@Test
+public void assignmentVerifyFrames() {
+
+	 driver.get("https://www.hyrtutorials.com/p/frames-practice.html");	
+     List <WebElement> iframe_tags = driver.findElements(By.tagName("iframe"));
+     int numberoftags =  iframe_tags.size();
+     System.out.println("The total number of frames in the Webpage  "+ numberoftags);
+     WebElement text_field = driver.findElement(By.xpath("//input[@id='name']"));
+     text_field.sendKeys("sree");
+     driver.switchTo().frame("frm1");
+     WebElement menu1 = driver.findElement(By.xpath("//select[@id='course']"));
+     Select select = new Select(menu1);
+     select.selectByVisibleText("Java");
+     driver.switchTo().defaultContent();
+     driver.switchTo().frame("frm2");
+     WebElement frame1_text = driver.findElement(By.xpath("//select[@id='selectnav1']"));
+     Select select1 = new Select(frame1_text);
+     select1.selectByVisibleText("-- Selenium");
+	  driver.switchTo().defaultContent();// to home page from a frame
+}
+@Test
+public void dynamicwebtable()
+{
+	driver.get("https://money.rediff.com/indices");
+	WebElement showmore = driver.findElement(By.xpath("//a[@id='showMoreLess']"));
+	showmore.click();
+	WebElement webtable = driver.findElement(By.xpath("//table[@id='dataTable']//tbody"));
+	List<WebElement> rows = webtable.findElements(By.tagName("tr"));
+	int rowsize = rows.size();
+	for (int i = 0; i < rowsize; i++) {
+		List<WebElement> columns = rows.get(i).findElements(By.tagName("td"));
+		int columnsize = columns.size();
+		for (int j = 0; j < columnsize; j++) {
+			String celltext = columns.get(j).getText();
+			if (celltext.equals("S&P BSE 200")) {
+				System.out.println("Pre Close value is" + " " + columns.get(1).getText());
+			}
+		}
+	}
+	
 }
 }
